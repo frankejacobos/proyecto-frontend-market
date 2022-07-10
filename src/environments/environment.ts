@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  API_URL: 'https://proyecto-backend-market.herokuapp.com/'
+  API_URL: 'https://proyecto-backend-market.herokuapp.com'
 };
 
 /*
