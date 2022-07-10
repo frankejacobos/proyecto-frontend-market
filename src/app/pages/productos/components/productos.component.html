@@ -1,0 +1,30 @@
+<main class="container">
+  <div class="p-3 mb-4 text-white rounded bg-dark">
+    <div class="px-0">
+      <span class="display-2">Productos</span>
+    </div>
+  </div>
+  <section class="row mb-2">
+    <article class="col-md-6 col-lg-4" *ngFor="let producto of productos">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-success">{{producto.categoria.nombre}}</strong>
+          <h3 class="mb-0">{{producto.descripcion|titlecase}}</h3>
+          <div class="d-flex justify-content-between">
+            <div class="mb-1 text-muted">CODIGO: </div>
+            <div class="mb-1 text-muted">{{producto.codigo}}</div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="mb-1 text-muted">PRECIO UNITARIO: </div>
+            <div class="mb-1 text-muted">{{producto.precio_unitario|currency:'S/. '}}</div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="mb-1 text-muted">STOCK ALMACEN: </div>
+            <div class="mb-1 text-muted">{{producto.stock_almacen}} uds.</div>
+          </div>
+          <a href="#">Editar</a>
+        </div>
+      </div>
+    </article>
+  </section>
+</main>

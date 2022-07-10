@@ -1,0 +1,21 @@
+<header>
+  <div class="px-3 py-2 bg-ligth">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a [routerLink]="['']"
+          class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-decoration-none border p-2 text-secondary">
+          <mat-icon>home</mat-icon>
+          <span class="m-0 ms-2">MI TIENDA</span>
+        </a>
+        <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+          <li *ngFor="let item of items">
+            <a [routerLink]="item.nombre" class="nav-link text-secondary">
+              <mat-icon class="bi d-block mx-auto mb-1" width="24" height="24">{{item.icon}}</mat-icon>
+              {{item.nombre|titlecase}}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>

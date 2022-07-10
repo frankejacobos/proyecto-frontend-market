@@ -1,0 +1,43 @@
+<main class="container">
+  <div class="p-3 mb-4 text-white rounded bg-dark">
+    <div class="px-0">
+      <span class="display-2">Ventas</span>
+    </div>
+  </div>
+  <section class="row mb-2">
+    <article class="col-lg-6" *ngFor="let venta of ventas">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-success">{{venta.fecha| date:'short':'+05:00'}}</strong>
+          <!-- <h3 class="mb-0">{{venta.cliente.nombre_de_persona|titlecase}}</h3> -->
+          <table class="table table-hover table-bordered">
+            <thead>
+              <tr>
+                <th class="mb-1 text-muted text-center">n.</th>
+                <th class="mb-1 text-muted text-center">cantidad</th>
+                <th class="mb-1 text-muted text-center">unidad</th>
+                <th class="mb-1 text-muted">descripcion</th>
+                <th class="mb-1 text-muted">prec unit</th>
+                <th class="mb-1 text-muted">subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of venta.items;index as i">
+                <td class="mb-1 text-muted text-center">{{i+1}}</td>
+                <td class="mb-1 text-muted text-center">{{item.cantidad}}</td>
+                <td class="mb-1 text-muted text-center">{{item.unidad}}</td>
+                <td class="mb-1 text-muted">{{item.productoId}}</td>
+                <td class="mb-1 text-muted">{{item.precio|currency:'S/. '}}</td>
+                <td class="mb-1 text-muted ">{{item.cantidad*item.precio|currency:'S/. '}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="d-flex justify-content-between">
+            <div class="mb-1 text-muted">IMPORTE: </div>
+            <div class="mb-1 text-muted">{{venta.importe|currency:'S/. '}}</div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+</main>
