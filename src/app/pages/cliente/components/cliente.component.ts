@@ -32,7 +32,18 @@ export class ClienteComponent implements OnInit {
     this.mostrarEditar = true
   }
   actualizar(): void {
-    this._service.actualizarCliente(this.cliente, this.cliente._id)
+    let id = this.cliente._id
+    let data = {
+      nombre_de_persona: this.cliente.nombre_de_persona,
+      tipo_de_persona: this.cliente.tipo_de_persona,
+      tipo_de_documento: this.cliente.tipo_de_documento,
+      numero_de_documento: this.cliente.numero_de_documento,
+      direccion: this.cliente.direccion,
+      localidad: this.cliente.localidad,
+      correo: this.cliente.correo,
+      telefono: this.cliente.telefono,
+    }
+    this._service.actualizarCliente(data, id)
       .subscribe((): void => { this.obtenerClientes() })
   }
   cancelar(): void { this.obtenerClientes() }
