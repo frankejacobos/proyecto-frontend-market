@@ -1,54 +1,75 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { LoginService } from '../../login/services/login.service';
 import { DistribuidorService } from '../services/distribuidor.service';
-
-interface Distribuidor { _id: string; vendedor: string; telefono: string; direccion: string; localidad: string; }
+import { Distribuidor } from './Distribuidor';
 
 @Component({
   selector: 'app-distribuidores',
   templateUrl: './distribuidores.component.html',
-  styleUrls: ['./distribuidores.component.scss']
+  styleUrls: ['./distribuidores.component.scss'],
 })
 export class DistribuidoresComponent implements OnInit {
-
-  constructor(private _service: DistribuidorService) { }
-  distribuidores: Distribuidor[] = []
-  distribuidor: Distribuidor = { _id: '', vendedor: '', telefono: '', direccion: '', localidad: '' }
-  mostrarEditar: boolean = false
-  mostrarAgregar: boolean = false
+  distribuidores: Distribuidor[] = [];
+  distribuidor: Distribuidor = this.limpiarDistribuidor();
+  mostrarEditar: boolean = false;
+  mostrarAgregar: boolean = false;
+  constructor(
+    private _service: DistribuidorService,
+    private loginService: LoginService,
+    private router: Router
+  ) {
+    if (!this.loginService.existeToken()) {
+      this.router.navigate(['/login']);
+    }
+  }
   ngOnInit(): void {
-    this.obtenerDistribuidores()
-  }
-  abrirEditar(id: string): void {
-    this._service.obtenerDistribuidores()
-      .subscribe((data) => this.distribuidor = data.find((p: { _id: string; }) => p._id == id))
-    this.mostrarEditar = true
-  }
-  actualizarDistribuidor(): void {
-    this._service.actualizarDistribuidor(this.distribuidor, this.distribuidor._id)
-      .subscribe((): void => { this.obtenerDistribuidores() })
-  }
-  cancelar(): void {
-    this.obtenerDistribuidores()
+    this.obtenerDistribuidores();
   }
   obtenerDistribuidores(): void {
-    this.mostrarEditar = false
-    this.mostrarAgregar = false
-    this._service.obtenerDistribuidores()
-      .subscribe((data) => this.distribuidores = data)
+    this.mostrarEditar = false;
+    this.mostrarAgregar = false;
+    this._service
+      .obtenerDistribuidores()
+      .subscribe((data) => (this.distribuidores = data));
   }
-  abrirAgregar(): void {
-    this.distribuidor = { _id: '', vendedor: '', telefono: '', direccion: '', localidad: '' }
-    this.mostrarAgregar = true
+  abrirFormulario(id?: string) {
+    if (id) {
+      this._service
+        .obtenerDistribuidor(id)
+        .subscribe((data) => (this.distribuidor = data));
+      this.mostrarEditar = true;
+    } else {
+      this.distribuidor = this.limpiarDistribuidor();
+      this.mostrarAgregar = true;
+    }
   }
   agregarDistribuidor(): void {
-    this._service.agregarDistribuidor({
-      vendedor: this.distribuidor.vendedor, telefono: this.distribuidor.telefono,
-      direccion: this.distribuidor.direccion, localidad: this.distribuidor.localidad
-    })
-      .subscribe((): void => { this.obtenerDistribuidores() })
+    this._service.agregarDistribuidor(this.distribuidor).subscribe((): void => {
+      this.obtenerDistribuidores();
+    });
   }
-  eliminarDistribuidor(id: string) {
-    this._service.eliminarDistribuidor(id)
-      .subscribe((): void => { this.obtenerDistribuidores() })
+  actualizarDistribuidor(): void {
+    this._service
+      .actualizarDistribuidor(this.distribuidor)
+      .subscribe((): void => {
+        this.obtenerDistribuidores();
+      });
+  }
+  eliminarDistribuidor(id?: string) {
+    if (id) {
+      this._service.eliminarDistribuidor(id).subscribe((): void => {
+        this.obtenerDistribuidores();
+      });
+    }
+  }
+  limpiarDistribuidor() {
+    return {
+      _id: '',
+      vendedor: '',
+      telefono: '',
+      direccion: '',
+      localidad: '',
+    };
   }
 }

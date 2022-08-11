@@ -3,41 +3,153 @@
     <div class="px-0">
       <span class="display-2">Ventas</span>
     </div>
+    <div class="d-flex justify-content-between">
+      <a (click)="abrirAgregar()" class="mt-2 btn btn-primary">
+        Registrar Nueva Venta
+      </a>
+      <span class="display-6">
+        {{ calcularTotalVentas() | currency: "S/. " }}
+      </span>
+    </div>
   </div>
   <section class="row mb-2">
     <article class="col-lg-6" *ngFor="let venta of ventas">
-      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+      <div
+        class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative"
+      >
         <div class="col p-4 d-flex flex-column position-static">
-          <strong class="d-inline-block mb-2 text-success">{{venta.fecha| date:'short':'+05:00'}}</strong>
-          <!-- <h3 class="mb-0">{{venta.cliente.nombre_de_persona|titlecase}}</h3> -->
+          <strong class="d-inline-block mb-2 text-success">{{
+            venta.fecha | date: "short":"+05:00"
+          }}</strong>
           <table class="table table-hover table-bordered">
             <thead>
               <tr>
-                <th class="mb-1 text-muted text-center">n.</th>
-                <th class="mb-1 text-muted text-center">cantidad</th>
-                <th class="mb-1 text-muted text-center">unidad</th>
-                <th class="mb-1 text-muted">descripcion</th>
-                <th class="mb-1 text-muted">prec unit</th>
-                <th class="mb-1 text-muted">subtotal</th>
+                <th>Producto</th>
+                <th class="text-center">Cantidad</th>
+                <th class="text-center">Precio</th>
+                <th class="text-center">Total</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of venta.items;index as i">
-                <td class="mb-1 text-muted text-center">{{i+1}}</td>
-                <td class="mb-1 text-muted text-center">{{item.cantidad}}</td>
-                <td class="mb-1 text-muted text-center">{{item.unidad}}</td>
-                <td class="mb-1 text-muted">{{item.productoId}}</td>
-                <td class="mb-1 text-muted">{{item.precio|currency:'S/. '}}</td>
-                <td class="mb-1 text-muted ">{{item.cantidad*item.precio|currency:'S/. '}}</td>
+              <tr *ngFor="let item of venta.items">
+                <td>{{ item.producto.descripcion }}</td>
+                <td class="text-center">{{ item.cantidad }}</td>
+                <td class="text-center">
+                  {{ item.producto.precio_venta | currency: "S/. " }}
+                </td>
+                <td class="text-center">
+                  {{
+                    item.producto.precio_venta * item.cantidad
+                      | currency: "S/. "
+                  }}
+                </td>
               </tr>
             </tbody>
           </table>
           <div class="d-flex justify-content-between">
-            <div class="mb-1 text-muted">IMPORTE: </div>
-            <div class="mb-1 text-muted">{{venta.importe|currency:'S/. '}}</div>
+            <div class="mb-1 text-muted">IMPORTE:</div>
+            <div class="mb-1 text-muted">
+              {{ venta.importe | currency: "S/. " }}
+            </div>
           </div>
         </div>
       </div>
     </article>
+  </section>
+  <section class="row mb-2" [hidden]="!mostrarAgregar">
+    <div [hidden]="carrito.length == 0">
+      <h2 class="text-center mt-2">Detalles de la Venta a Registrar</h2>
+      <button type="button" class="btn btn-primary" (click)="insertarVenta()">
+        Guardar Venta
+      </button>
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th class="mb-1 text-muted text-center">n.</th>
+            <th class="mb-1 text-muted">descripcion</th>
+            <th class="mb-1 text-muted">categoria</th>
+            <th class="mb-1 text-muted text-center">cantidad</th>
+            <th class="mb-1 text-muted text-center">prec unit</th>
+            <th class="mb-1 text-muted text-center">subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of carrito; index as i">
+            <td class="mb-1 text-muted text-center">{{ i + 1 }}</td>
+            <td class="mb-1 text-muted">{{ item.producto.descripcion }}</td>
+            <td class="mb-1 text-muted">
+              {{ item.producto.categoria.nombre }}
+            </td>
+            <td class="mb-1 text-muted text-center">{{ item.cantidad }}</td>
+            <td class="mb-1 text-muted text-center">
+              {{ item.producto.precio_venta | currency: "S/. " }}
+            </td>
+            <td class="mb-1 text-muted text-center">
+              {{
+                item.cantidad * item.producto.precio_venta | currency: "S/. "
+              }}
+            </td>
+          </tr>
+          <tr>
+            <td class="mb-1 text-muted text-center" colspan="5">
+              <strong>IMPORTE</strong>
+            </td>
+            <td class="mb-1 text-muted text-center">
+              <strong>
+                {{ obtenerImporte() | currency: "S/. " }}
+              </strong>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h2 class="text-center">Formulario de datos</h2>
+    <form #ventaForm="ngForm" class="col-12">
+      <div class="row g-0">
+        <div class="form-group col p-3">
+          <label for="producto">Producto</label>
+          <select
+            class="form-control"
+            id="producto"
+            name="producto"
+            [(ngModel)]="item.producto._id"
+            required
+          >
+            <option *ngFor="let pr of productos" [value]="pr._id">
+              {{ pr.descripcion }}
+              stock: {{ pr.stock_almacen }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group col p-3">
+          <label for="cantidad">Cantidad</label>
+          <input
+            type="number"
+            class="form-control"
+            id="cantidad"
+            name="cantidad"
+            [(ngModel)]="item.cantidad"
+            required
+          />
+        </div>
+      </div>
+      <div class="d-flex justify-content-around">
+        <button
+          type="button"
+          (click)="obtenerVentas()"
+          class="btn btn-danger d-flex align-items-center"
+        >
+          <mat-icon>clear</mat-icon>
+        </button>
+        <button
+          type="button"
+          (click)="insertarProductoEnCarrito()"
+          [disabled]="ventaForm.invalid"
+          class="btn btn-success d-flex align-items-center"
+        >
+          <mat-icon>done_outline</mat-icon>
+        </button>
+      </div>
+    </form>
   </section>
 </main>

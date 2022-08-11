@@ -5,6 +5,7 @@ import { ClienteComponent } from './pages/cliente/components/cliente.component';
 import { ComprasComponent } from './pages/compras/components/compras.component';
 import { DistribuidoresComponent } from './pages/distribuidores/components/distribuidores.component';
 import { InicioComponent } from './pages/inicio/components/inicio.component';
+import { LoginComponent } from './pages/login/components/login.component';
 import { ProductosComponent } from './pages/productos/components/productos.component';
 import { VentasComponent } from './pages/ventas/components/ventas.component';
 
@@ -13,14 +14,15 @@ const routes: Routes = [
   { path: 'inicio', component: InicioComponent },
   { path: 'productos', component: ProductosComponent },
   { path: 'categorias', component: CategoriasComponent },
-  { path: 'cliente', component: ClienteComponent },
+  { path: 'clientes', component: ClienteComponent },
   { path: 'distribuidores', component: DistribuidoresComponent },
   { path: 'compras', component: ComprasComponent },
   { path: 'ventas', component: VentasComponent },
+  { path: 'login', component: LoginComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

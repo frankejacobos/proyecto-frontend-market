@@ -1,0 +1,45 @@
+<main class="container d-flex justify-content-center align-items-center">
+  <section class="row py-4">
+    <h2 class="text-center text-primary fw-bold">INICIAR SESIÓN</h2>
+    <form #loginform="ngForm" class="col-12">
+      <div class="form-group col p-3 pt-0">
+        <label for="email">Email</label>
+        <input
+          type="text"
+          class="form-control"
+          id="email"
+          name="email"
+          [(ngModel)]="userRequest.email"
+          required
+          minlength="3"
+          maxlength="50"
+          placeholder="Ingrese su email"
+        />
+      </div>
+      <div class="form-group col p-3">
+        <label for="password">Contraseña</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          [(ngModel)]="userRequest.password"
+          required
+          minlength="3"
+          maxlength="50"
+          placeholder="Ingrese la contraseña"
+        />
+      </div>
+      <div class="form-group col p-3 d-flex justify-content-center">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="!loginform.form.valid"
+          (click)="iniciarSesion()"
+        >
+          Iniciar sesión
+        </button>
+      </div>
+    </form>
+  </section>
+</main>

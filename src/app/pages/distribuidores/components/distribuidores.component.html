@@ -3,25 +3,41 @@
     <div class="px-0">
       <span class="display-2">Distribuidores</span>
     </div>
-    <a (click)="abrirAgregar()" class="mt-2 btn btn-primary">
+    <a (click)="abrirFormulario()" class="mt-2 btn btn-primary">
       Agregar distribuidor
     </a>
   </div>
   <section class="row mb-2" [hidden]="mostrarEditar || mostrarAgregar">
-    <article class="col-md-6 col-lg-4" *ngFor="let distribuidor of distribuidores">
-      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+    <article
+      class="col-md-6 col-lg-4"
+      *ngFor="let distribuidor of distribuidores"
+    >
+      <div
+        class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative"
+      >
         <div class="col p-4 d-flex flex-column position-static">
-          <strong class="d-inline-block mb-2 text-success">{{distribuidor.localidad|titlecase}}</strong>
-          <h3 class="mb-0">{{distribuidor.vendedor|titlecase}}</h3>
-          <div class="mb-1 text-muted">telefono: {{distribuidor.telefono}}</div>
-          <p class="card-text mb-auto" style="text-align: justify;">
-            Distribuidor ubicado en {{distribuidor.direccion|titlecase}} en la localidad
-            de {{distribuidor.localidad|titlecase}}.</p>
+          <strong class="d-inline-block mb-2 text-success">{{
+            distribuidor.localidad | titlecase
+          }}</strong>
+          <h3 class="mb-0">{{ distribuidor.vendedor | titlecase }}</h3>
+          <div class="mb-1 text-muted">
+            telefono: {{ distribuidor.telefono }}
+          </div>
+          <p class="card-text mb-auto">
+            Distribuidor ubicado en {{ distribuidor.direccion | titlecase }} en
+            la localidad de {{ distribuidor.localidad | titlecase }}.
+          </p>
           <div class="row g-0">
-            <a (click)="abrirEditar(distribuidor._id)" class="col mx-2 mt-2 btn btn-success">
+            <a
+              (click)="abrirFormulario(distribuidor._id)"
+              class="col mx-2 mt-2 btn btn-success"
+            >
               <mat-icon>edit</mat-icon>
             </a>
-            <a (click)="eliminarDistribuidor(distribuidor._id)" class="col mx-2 mt-2 btn btn-danger">
+            <a
+              (click)="eliminarDistribuidor(distribuidor._id)"
+              class="col mx-2 mt-2 btn btn-danger"
+            >
               <mat-icon>delete</mat-icon>
             </a>
           </div>
@@ -37,9 +53,20 @@
           <!-- nombre de distribuidor -->
           <div class="form-group col p-3">
             <label for="vendedor" class="mb-0">vendedor:</label>
-            <input type="text" id="vendedor" name="vendedor" class="form-control" required minlength="4"
-              [(ngModel)]="distribuidor.vendedor" #vendedor="ngModel">
-            <div *ngIf="vendedor.invalid && (vendedor.dirty || vendedor.touched)" class="text-danger">
+            <input
+              type="text"
+              id="vendedor"
+              name="vendedor"
+              class="form-control"
+              required
+              minlength="4"
+              [(ngModel)]="distribuidor.vendedor"
+              #vendedor="ngModel"
+            />
+            <div
+              *ngIf="vendedor.invalid && (vendedor.dirty || vendedor.touched)"
+              class="text-danger"
+            >
               <div *ngIf="vendedor.errors?.['required']">
                 nombre es requerido
               </div>
@@ -51,9 +78,20 @@
           <!-- telefono de distribuidor -->
           <div class="form-group col p-3">
             <label for="telefono" class="mb-0">telefono:</label>
-            <input type="text" id="telefono" name="telefono" class="form-control" required minlength="4"
-              [(ngModel)]="distribuidor.telefono" #telefono="ngModel">
-            <div *ngIf="telefono.invalid && (telefono.dirty || telefono.touched)" class="text-danger">
+            <input
+              type="text"
+              id="telefono"
+              name="telefono"
+              class="form-control"
+              required
+              minlength="4"
+              [(ngModel)]="distribuidor.telefono"
+              #telefono="ngModel"
+            />
+            <div
+              *ngIf="telefono.invalid && (telefono.dirty || telefono.touched)"
+              class="text-danger"
+            >
               <div *ngIf="telefono.errors?.['required']">
                 telefono es requerido
               </div>
@@ -67,9 +105,22 @@
           <!-- direccion de distribuidor -->
           <div class="form-group col p-3">
             <label for="direccion" class="mb-0">Direccion:</label>
-            <input type="text" id="direccion" name="direccion" class="form-control" required minlength="4"
-              [(ngModel)]="distribuidor.direccion" #direccion="ngModel">
-            <div *ngIf="direccion.invalid && (direccion.dirty || direccion.touched)" class="text-danger">
+            <input
+              type="text"
+              id="direccion"
+              name="direccion"
+              class="form-control"
+              required
+              minlength="4"
+              [(ngModel)]="distribuidor.direccion"
+              #direccion="ngModel"
+            />
+            <div
+              *ngIf="
+                direccion.invalid && (direccion.dirty || direccion.touched)
+              "
+              class="text-danger"
+            >
               <div *ngIf="direccion.errors?.['required']">
                 direccion es requerida
               </div>
@@ -81,9 +132,22 @@
           <!-- localidad de distribuidor -->
           <div class="form-group col p-3">
             <label for="localidad" class="mb-0">Localidad:</label>
-            <input type="text" id="localidad" name="localidad" class="form-control" required minlength="4"
-              [(ngModel)]="distribuidor.localidad" #localidad="ngModel">
-            <div *ngIf="localidad.invalid && (localidad.dirty || localidad.touched)" class="text-danger">
+            <input
+              type="text"
+              id="localidad"
+              name="localidad"
+              class="form-control"
+              required
+              minlength="4"
+              [(ngModel)]="distribuidor.localidad"
+              #localidad="ngModel"
+            />
+            <div
+              *ngIf="
+                localidad.invalid && (localidad.dirty || localidad.touched)
+              "
+              class="text-danger"
+            >
               <div *ngIf="localidad.errors?.['required']">
                 localidad es requerida
               </div>
@@ -93,19 +157,32 @@
             </div>
           </div>
         </div>
+
         <div class="d-flex justify-content-around">
-          <button type="button" (click)="cancelar()" class="btn btn-danger d-flex align-items-center">
+          <button
+            type="button"
+            (click)="obtenerDistribuidores()"
+            class="btn btn-danger d-flex align-items-center"
+          >
             <mat-icon>clear</mat-icon>
           </button>
           <div [hidden]="mostrarAgregar">
-            <button type="button" (click)="actualizarDistribuidor()" [disabled]="distribuidorForm.invalid"
-              class="btn btn-success d-flex align-items-center">
+            <button
+              type="button"
+              (click)="actualizarDistribuidor()"
+              [disabled]="distribuidorForm.invalid"
+              class="btn btn-success d-flex align-items-center"
+            >
               <mat-icon>done_outline</mat-icon>
             </button>
           </div>
           <div [hidden]="mostrarEditar">
-            <button type="button" (click)="agregarDistribuidor()" [disabled]="distribuidorForm.invalid"
-              class="btn btn-success d-flex align-items-center">
+            <button
+              type="button"
+              (click)="agregarDistribuidor()"
+              [disabled]="distribuidorForm.invalid"
+              class="btn btn-success d-flex align-items-center"
+            >
               <mat-icon>done_outline</mat-icon>
             </button>
           </div>

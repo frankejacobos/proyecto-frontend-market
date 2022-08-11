@@ -3,16 +3,102 @@
     <div class="px-0">
       <span class="display-2">Categorias</span>
     </div>
+    <a (click)="abrirFormulario()" class="mt-2 btn btn-primary">
+      Agregar categoria
+    </a>
   </div>
-  <section class="row mb-2">
-    <article class="col-md-6 col-lg-4" *ngFor="let categoria of categorias">
-      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+  <section class="row mb-2" [hidden]="mostrarEditar || mostrarAgregar">
+    <article class="col-md-6 col-lg-3" *ngFor="let categoria of categorias">
+      <div
+        class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative"
+      >
         <div class="col p-4 d-flex flex-column position-static">
-          <strong class="d-inline-block mb-2 text-success">{{categoria.codigo}}</strong>
-          <h3 class="mb-0">{{categoria.nombre|titlecase}}</h3>
-          <a href="#" class="stretched-link">Editar</a>
+          <strong class="d-inline-block mb-2 text-success">{{
+            categoria.codigo
+          }}</strong>
+          <h3 class="mb-0">{{ categoria.nombre | titlecase }}</h3>
+          <div class="row g-0">
+            <a
+              (click)="abrirFormulario(categoria._id)"
+              class="col mx-2 mt-2 btn btn-success"
+            >
+              <mat-icon>edit</mat-icon>
+            </a>
+            <a
+              (click)="eliminarCategoria(categoria._id)"
+              class="col mx-2 mt-2 btn btn-danger"
+            >
+              <mat-icon>delete</mat-icon>
+            </a>
+          </div>
         </div>
       </div>
     </article>
+  </section>
+  <section class="row mb-2" [hidden]="!mostrarEditar && !mostrarAgregar">
+    <h2 class="text-center">Formulario de datos</h2>
+    <form #categoriaform="ngForm" class="col-12">
+      <div class="row g-0">
+        <div class="form-group col p-3">
+          <label for="codigo">Codigo</label>
+          <input
+            type="text"
+            class="form-control"
+            id="codigo"
+            name="codigo"
+            [(ngModel)]="categoria.codigo"
+            #codigo="ngModel"
+            required
+            minlength="3"
+            maxlength="50"
+            placeholder="Ingrese el codigo de la categoria"
+          />
+        </div>
+        <div class="form-group col p-3">
+          <label for="nombre">Nombre</label>
+          <input
+            type="text"
+            class="form-control"
+            id="nombre"
+            name="nombre"
+            [(ngModel)]="categoria.nombre"
+            #nombre="ngModel"
+            required
+            minlength="3"
+            maxlength="50"
+            placeholder="Ingrese el nombre de la categoria"
+          />
+        </div>
+      </div>
+      <div class="d-flex justify-content-around">
+        <button
+          type="button"
+          (click)="obtenerCategorias()"
+          class="btn btn-danger d-flex align-items-center"
+        >
+          <mat-icon>clear</mat-icon>
+        </button>
+        <div [hidden]="mostrarAgregar">
+          <button
+            type="button"
+            (click)="actualizarCategoria()"
+            [disabled]="categoriaform.invalid"
+            class="btn btn-success d-flex align-items-center"
+          >
+            <mat-icon>done_outline</mat-icon>
+          </button>
+        </div>
+        <div [hidden]="mostrarEditar">
+          <button
+            type="button"
+            (click)="agregarCategoria()"
+            [disabled]="categoriaform.invalid"
+            class="btn btn-success d-flex align-items-center"
+          >
+            <mat-icon>done_outline</mat-icon>
+          </button>
+        </div>
+      </div>
+    </form>
   </section>
 </main>

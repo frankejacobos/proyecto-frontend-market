@@ -16,6 +16,8 @@ import { DistribuidoresComponent } from './pages/distribuidores/components/distr
 import { ComprasComponent } from './pages/compras/components/compras.component';
 import { VentasComponent } from './pages/ventas/components/ventas.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { httpInterceptorProviders } from './http-interceptors';
+import { LoginComponent } from './pages/login/components/login.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     DistribuidoresComponent,
     ComprasComponent,
     VentasComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,7 +42,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     MaterialModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [httpInterceptorProviders],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

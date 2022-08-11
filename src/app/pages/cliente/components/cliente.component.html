@@ -1,28 +1,51 @@
 <main class="container">
   <div class="p-3 mb-4 text-white rounded bg-dark">
     <div class="px-0">
-      <span class="display-2">Cliente</span>
+      <span class="display-2">Clientes</span>
     </div>
+    <a (click)="abrirFormulario()" class="mt-2 btn btn-primary">
+      Agregar cliente
+    </a>
   </div>
-  <section class="row mb-2" [hidden]="mostrarEditar">
+  <section class="row mb-2" [hidden]="mostrarEditar || mostrarAgregar">
     <article class="col-md-6 col-lg-4" *ngFor="let cliente of clientes">
-      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+      <div
+        class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative"
+      >
         <div class="col p-4 d-flex flex-column position-static">
-          <strong class="d-inline-block mb-2 text-success">Persona {{cliente.tipo_de_persona}}</strong>
-          <h3 class="mb-0">{{cliente.nombre_de_persona|titlecase}}</h3>
-          <div class="mb-1 text-muted">{{cliente.correo}}</div>
-          <div class="mb-1 text-muted">{{cliente.tipo_de_documento|uppercase}}: {{cliente.numero_de_documento}}</div>
-          <p class="card-text mb-auto" style="text-align: justify;">
-            Persona {{cliente.tipo_de_persona}} ubicada en {{cliente.direccion|titlecase}} en la localidad de
-            {{cliente.localidad|titlecase}}.</p>
-          <a (click)="editar(cliente._id)" class="mt-2 btn btn-success">
-            <mat-icon>edit</mat-icon>
-          </a>
+          <strong class="d-inline-block mb-2 text-success"
+            >Persona {{ cliente.tipo_de_persona }}</strong
+          >
+          <h3 class="mb-0">{{ cliente.nombre_de_persona | titlecase }}</h3>
+          <div class="mb-1 text-muted">{{ cliente.correo }}</div>
+          <div class="mb-1 text-muted">
+            {{ cliente.tipo_de_documento | uppercase }}:
+            {{ cliente.numero_de_documento }}
+          </div>
+          <p class="card-text mb-auto">
+            Persona {{ cliente.tipo_de_persona }} ubicada en
+            {{ cliente.direccion | titlecase }} en la localidad de
+            {{ cliente.localidad | titlecase }}.
+          </p>
+          <div class="row g-0">
+            <a
+              (click)="abrirFormulario(cliente._id)"
+              class="col mx-2 mt-2 btn btn-success"
+            >
+              <mat-icon>edit</mat-icon>
+            </a>
+            <a
+              (click)="eliminarCliente(cliente._id)"
+              class="col mx-2 mt-2 btn btn-danger"
+            >
+              <mat-icon>delete</mat-icon>
+            </a>
+          </div>
         </div>
       </div>
     </article>
   </section>
-  <section class="row mb-2" [hidden]="!mostrarEditar">
+  <section class="row mb-2" [hidden]="!mostrarEditar && !mostrarAgregar">
     <h2 class="text-center">Formulario de datos</h2>
     <form #clienteForm="ngForm" class="col-12">
       <div [hidden]="clienteForm.submitted">
@@ -30,10 +53,23 @@
           <!-- nombre de cliente -->
           <div class="form-group col p-3">
             <label for="nombre_de_persona" class="mb-0">Nombre:</label>
-            <input type="text" id="nombre_de_persona" name="nombre_de_persona" class="form-control" required
-              minlength="4" [(ngModel)]="cliente.nombre_de_persona" #nombre_de_persona="ngModel">
-            <div *ngIf="nombre_de_persona.invalid && (nombre_de_persona.dirty || nombre_de_persona.touched)"
-              class="text-danger">
+            <input
+              type="text"
+              id="nombre_de_persona"
+              name="nombre_de_persona"
+              class="form-control"
+              required
+              minlength="4"
+              [(ngModel)]="cliente.nombre_de_persona"
+              #nombre_de_persona="ngModel"
+            />
+            <div
+              *ngIf="
+                nombre_de_persona.invalid &&
+                (nombre_de_persona.dirty || nombre_de_persona.touched)
+              "
+              class="text-danger"
+            >
               <div *ngIf="nombre_de_persona.errors?.['required']">
                 nombre es requerido
               </div>
@@ -45,34 +81,79 @@
           <!-- tipo de persona -->
           <div class="form-group col p-3">
             <label for="tipo_de_persona" class="mb-0">Tipo de persona:</label>
-            <select id="tipo_de_persona" name="tipo_de_persona" required [(ngModel)]="cliente.tipo_de_persona"
-              class="form-control" #tipo_de_persona="ngModel" required>
-              <option *ngFor="let p of tipo_persona" [value]="p">{{p}}</option>
+            <select
+              id="tipo_de_persona"
+              name="tipo_de_persona"
+              required
+              [(ngModel)]="cliente.tipo_de_persona"
+              class="form-control"
+              #tipo_de_persona="ngModel"
+              required
+            >
+              <option *ngFor="let p of tipo_persona" [value]="p">
+                {{ p }}
+              </option>
             </select>
-            <div *ngIf="tipo_de_persona.errors && tipo_de_persona.touched" class="text-danger">
-              <div *ngIf="tipo_de_persona.errors['required']">tipo de cliente es requerido.</div>
+            <div
+              *ngIf="tipo_de_persona.errors && tipo_de_persona.touched"
+              class="text-danger"
+            >
+              <div *ngIf="tipo_de_persona.errors['required']">
+                tipo de cliente es requerido.
+              </div>
             </div>
           </div>
         </div>
         <div class="row g-0">
           <!-- tipo de documento -->
           <div class="form-group col p-3">
-            <label for="tipo_de_documento" class="mb-0">Tipo de documento:</label>
-            <select id="tipo_de_documento" name="tipo_de_documento" required [(ngModel)]="cliente.tipo_de_documento"
-              class="form-control" #tipo_de_documento="ngModel" required>
-              <option *ngFor="let p of tipo_documento" [value]="p">{{p}}</option>
+            <label for="tipo_de_documento" class="mb-0"
+              >Tipo de documento:</label
+            >
+            <select
+              id="tipo_de_documento"
+              name="tipo_de_documento"
+              required
+              [(ngModel)]="cliente.tipo_de_documento"
+              class="form-control"
+              #tipo_de_documento="ngModel"
+              required
+            >
+              <option *ngFor="let p of tipo_documento" [value]="p">
+                {{ p }}
+              </option>
             </select>
-            <div *ngIf="tipo_de_documento.errors && tipo_de_documento.touched" class="text-danger">
-              <div *ngIf="tipo_de_documento.errors['required']">tipo de documento es requerido.</div>
+            <div
+              *ngIf="tipo_de_documento.errors && tipo_de_documento.touched"
+              class="text-danger"
+            >
+              <div *ngIf="tipo_de_documento.errors['required']">
+                tipo de documento es requerido.
+              </div>
             </div>
           </div>
           <!-- numero de documento -->
           <div class="form-group col p-3">
-            <label for="numero_de_documento" class="mb-0">Numero de documento:</label>
-            <input type="number" id="numero_de_documento" name="numero_de_documento" class="form-control" required
-              minlength="7" [(ngModel)]="cliente.numero_de_documento" #numero_de_documento="ngModel">
-            <div *ngIf="numero_de_documento.invalid && (numero_de_documento.dirty || numero_de_documento.touched)"
-              class="text-danger">
+            <label for="numero_de_documento" class="mb-0"
+              >Numero de documento:</label
+            >
+            <input
+              type="number"
+              id="numero_de_documento"
+              name="numero_de_documento"
+              class="form-control"
+              required
+              minlength="7"
+              [(ngModel)]="cliente.numero_de_documento"
+              #numero_de_documento="ngModel"
+            />
+            <div
+              *ngIf="
+                numero_de_documento.invalid &&
+                (numero_de_documento.dirty || numero_de_documento.touched)
+              "
+              class="text-danger"
+            >
               <div *ngIf="numero_de_documento.errors?.['required']">
                 numero de doc es requerido
               </div>
@@ -86,9 +167,22 @@
           <!-- direccion de cliente -->
           <div class="form-group col p-3">
             <label for="direccion" class="mb-0">Direccion:</label>
-            <input type="text" id="direccion" name="direccion" class="form-control" required minlength="4"
-              [(ngModel)]="cliente.direccion" #direccion="ngModel">
-            <div *ngIf="direccion.invalid && (direccion.dirty || direccion.touched)" class="text-danger">
+            <input
+              type="text"
+              id="direccion"
+              name="direccion"
+              class="form-control"
+              required
+              minlength="4"
+              [(ngModel)]="cliente.direccion"
+              #direccion="ngModel"
+            />
+            <div
+              *ngIf="
+                direccion.invalid && (direccion.dirty || direccion.touched)
+              "
+              class="text-danger"
+            >
               <div *ngIf="direccion.errors?.['required']">
                 direccion es requerida
               </div>
@@ -100,9 +194,22 @@
           <!-- localidad de cliente -->
           <div class="form-group col p-3">
             <label for="localidad" class="mb-0">Localidad:</label>
-            <input type="text" id="localidad" name="localidad" class="form-control" required minlength="4"
-              [(ngModel)]="cliente.localidad" #localidad="ngModel">
-            <div *ngIf="localidad.invalid && (localidad.dirty || localidad.touched)" class="text-danger">
+            <input
+              type="text"
+              id="localidad"
+              name="localidad"
+              class="form-control"
+              required
+              minlength="4"
+              [(ngModel)]="cliente.localidad"
+              #localidad="ngModel"
+            />
+            <div
+              *ngIf="
+                localidad.invalid && (localidad.dirty || localidad.touched)
+              "
+              class="text-danger"
+            >
               <div *ngIf="localidad.errors?.['required']">
                 localidad es requerida
               </div>
@@ -116,12 +223,21 @@
           <!-- correo de cliente -->
           <div class="form-group col p-3">
             <label for="correo" class="mb-0">Correo:</label>
-            <input type="email" id="correo" name="correo" class="form-control" required minlength="4"
-              [(ngModel)]="cliente.correo" #correo="ngModel">
-            <div *ngIf="correo.invalid && (correo.dirty || correo.touched)" class="text-danger">
-              <div *ngIf="correo.errors?.['required']">
-                correo es requerido
-              </div>
+            <input
+              type="email"
+              id="correo"
+              name="correo"
+              class="form-control"
+              required
+              minlength="4"
+              [(ngModel)]="cliente.correo"
+              #correo="ngModel"
+            />
+            <div
+              *ngIf="correo.invalid && (correo.dirty || correo.touched)"
+              class="text-danger"
+            >
+              <div *ngIf="correo.errors?.['required']">correo es requerido</div>
               <div *ngIf="correo.errors?.['minlength']">
                 correo deberia tener mas de 4 caracteres
               </div>
@@ -130,9 +246,20 @@
           <!-- telefono de cliente -->
           <div class="form-group col p-3">
             <label for="telefono" class="mb-0">telefono:</label>
-            <input type="text" id="telefono" name="telefono" class="form-control" required minlength="4"
-              [(ngModel)]="cliente.telefono" #telefono="ngModel">
-            <div *ngIf="telefono.invalid && (telefono.dirty || telefono.touched)" class="text-danger">
+            <input
+              type="text"
+              id="telefono"
+              name="telefono"
+              class="form-control"
+              required
+              minlength="4"
+              [(ngModel)]="cliente.telefono"
+              #telefono="ngModel"
+            />
+            <div
+              *ngIf="telefono.invalid && (telefono.dirty || telefono.touched)"
+              class="text-danger"
+            >
               <div *ngIf="telefono.errors?.['required']">
                 telefono es requerido
               </div>
@@ -142,14 +269,35 @@
             </div>
           </div>
         </div>
+
         <div class="d-flex justify-content-around">
-          <button type="button" (click)="cancelar()" class="btn btn-danger d-flex align-items-center">
+          <button
+            type="button"
+            (click)="obtenerClientes()"
+            class="btn btn-danger d-flex align-items-center"
+          >
             <mat-icon>clear</mat-icon>
           </button>
-          <button type="button" (click)="actualizar()" [disabled]="clienteForm.invalid"
-            class="btn btn-success d-flex align-items-center">
-            <mat-icon>done_outline</mat-icon>
-          </button>
+          <div [hidden]="mostrarAgregar">
+            <button
+              type="button"
+              (click)="actualizarCliente()"
+              [disabled]="clienteForm.invalid"
+              class="btn btn-success d-flex align-items-center"
+            >
+              <mat-icon>done_outline</mat-icon>
+            </button>
+          </div>
+          <div [hidden]="mostrarEditar">
+            <button
+              type="button"
+              (click)="agregarCliente()"
+              [disabled]="clienteForm.invalid"
+              class="btn btn-success d-flex align-items-center"
+            >
+              <mat-icon>done_outline</mat-icon>
+            </button>
+          </div>
         </div>
       </div>
     </form>
